@@ -1,14 +1,12 @@
 // Sources flattened with hardhat v2.11.2 https://hardhat.org
 
-// Website - validatoor.money (domain owned, not live as of Wednesday 21st September 2022)
-
 // Telegram - https://t.me/validatoor
 
-// Tax on the token is 5% for buys and sells -  accumulated for ETH Validators and future staking
+// Tax on the token is 5% for buys and sells -  accumulated for EVM Validators and future staking
 
 // File @openzeppelin/contracts/utils/Context.sol@v4.7.3
 
-
+// SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 
 pragma solidity ^0.8.0;
@@ -33,13 +31,10 @@ abstract contract Context {
     }
 }
 
-
 // File @openzeppelin/contracts/access/Ownable.sol@v4.7.3
 
 
 // OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)
-
-pragma solidity ^0.8.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -119,59 +114,233 @@ abstract contract Ownable is Context {
 }
 
 
-// File @uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol@v1.0.1
+// File @openzeppelin/contracts/utils/math/SafeMath.sol@v4.7.3
 
-pragma solidity >=0.5.0;
 
-interface IUniswapV2Pair {
-    event Approval(address indexed owner, address indexed spender, uint value);
-    event Transfer(address indexed from, address indexed to, uint value);
+// OpenZeppelin Contracts (last updated v4.6.0) (utils/math/SafeMath.sol)
 
-    function name() external pure returns (string memory);
-    function symbol() external pure returns (string memory);
-    function decimals() external pure returns (uint8);
-    function totalSupply() external view returns (uint);
-    function balanceOf(address owner) external view returns (uint);
-    function allowance(address owner, address spender) external view returns (uint);
 
-    function approve(address spender, uint value) external returns (bool);
-    function transfer(address to, uint value) external returns (bool);
-    function transferFrom(address from, address to, uint value) external returns (bool);
+// CAUTION
+// This version of SafeMath should only be used with Solidity 0.8 or later,
+// because it relies on the compiler's built in overflow checks.
 
-    function DOMAIN_SEPARATOR() external view returns (bytes32);
-    function PERMIT_TYPEHASH() external pure returns (bytes32);
-    function nonces(address owner) external view returns (uint);
+/**
+ * @dev Wrappers over Solidity's arithmetic operations.
+ *
+ * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler
+ * now has built in overflow checking.
+ */
+library SafeMath {
+    /**
+     * @dev Returns the addition of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            uint256 c = a + b;
+            if (c < a) return (false, 0);
+            return (true, c);
+        }
+    }
 
-    function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external;
+    /**
+     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b > a) return (false, 0);
+            return (true, a - b);
+        }
+    }
 
-    event Mint(address indexed sender, uint amount0, uint amount1);
-    event Burn(address indexed sender, uint amount0, uint amount1, address indexed to);
-    event Swap(
-        address indexed sender,
-        uint amount0In,
-        uint amount1In,
-        uint amount0Out,
-        uint amount1Out,
-        address indexed to
-    );
-    event Sync(uint112 reserve0, uint112 reserve1);
+    /**
+     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+            // benefit is lost if 'b' is also tested.
+            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+            if (a == 0) return (true, 0);
+            uint256 c = a * b;
+            if (c / a != b) return (false, 0);
+            return (true, c);
+        }
+    }
 
-    function MINIMUM_LIQUIDITY() external pure returns (uint);
-    function factory() external view returns (address);
-    function token0() external view returns (address);
-    function token1() external view returns (address);
-    function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast);
-    function price0CumulativeLast() external view returns (uint);
-    function price1CumulativeLast() external view returns (uint);
-    function kLast() external view returns (uint);
+    /**
+     * @dev Returns the division of two unsigned integers, with a division by zero flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a / b);
+        }
+    }
 
-    function mint(address to) external returns (uint liquidity);
-    function burn(address to) external returns (uint amount0, uint amount1);
-    function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external;
-    function skim(address to) external;
-    function sync() external;
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a % b);
+        }
+    }
 
-    function initialize(address, address) external;
+    /**
+     * @dev Returns the addition of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     *
+     * - Addition cannot overflow.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a + b;
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a - b;
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `*` operator.
+     *
+     * Requirements:
+     *
+     * - Multiplication cannot overflow.
+     */
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a * b;
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers, reverting on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator.
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a / b;
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * reverting when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a % b;
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
+     * overflow (when the result is negative).
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {trySub}.
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        unchecked {
+            require(b <= a, errorMessage);
+            return a - b;
+        }
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        unchecked {
+            require(b > 0, errorMessage);
+            return a / b;
+        }
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * reverting with custom message when dividing by zero.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryMod}.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
+        unchecked {
+            require(b > 0, errorMessage);
+            return a % b;
+        }
+    }
 }
 
 
@@ -180,7 +349,6 @@ interface IUniswapV2Pair {
 
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)
 
-pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -266,7 +434,6 @@ interface IERC20 {
 
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/IERC20Metadata.sol)
 
-pragma solidity ^0.8.0;
 
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -296,7 +463,6 @@ interface IERC20Metadata is IERC20 {
 
 // OpenZeppelin Contracts (last updated v4.7.0) (token/ERC20/ERC20.sol)
 
-pragma solidity ^0.8.0;
 
 
 
@@ -676,237 +842,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 }
 
 
-// File @openzeppelin/contracts/utils/math/SafeMath.sol@v4.7.3
-
-
-// OpenZeppelin Contracts (last updated v4.6.0) (utils/math/SafeMath.sol)
-
-pragma solidity ^0.8.0;
-
-// CAUTION
-// This version of SafeMath should only be used with Solidity 0.8 or later,
-// because it relies on the compiler's built in overflow checks.
-
-/**
- * @dev Wrappers over Solidity's arithmetic operations.
- *
- * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler
- * now has built in overflow checking.
- */
-library SafeMath {
-    /**
-     * @dev Returns the addition of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            uint256 c = a + b;
-            if (c < a) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b > a) return (false, 0);
-            return (true, a - b);
-        }
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-            // benefit is lost if 'b' is also tested.
-            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-            if (a == 0) return (true, 0);
-            uint256 c = a * b;
-            if (c / a != b) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the division of two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a / b);
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a % b);
-        }
-    }
-
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     *
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a + b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a - b;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     *
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a * b;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator.
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a / b;
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a % b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-     * overflow (when the result is negative).
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {trySub}.
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b <= a, errorMessage);
-            return a - b;
-        }
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a / b;
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting with custom message when dividing by zero.
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {tryMod}.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a % b;
-        }
-    }
-}
-
-
 // File @uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol@v1.0.1
 
 pragma solidity >=0.5.0;
@@ -928,13 +863,69 @@ interface IUniswapV2Factory {
 }
 
 
+// File @uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol@v1.0.1
+
+pragma solidity >=0.5.0;
+
+interface IUniswapV2Pair {
+    event Approval(address indexed owner, address indexed spender, uint value);
+    event Transfer(address indexed from, address indexed to, uint value);
+
+    function name() external pure returns (string memory);
+    function symbol() external pure returns (string memory);
+    function decimals() external pure returns (uint8);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address owner) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
+
+    function approve(address spender, uint value) external returns (bool);
+    function transfer(address to, uint value) external returns (bool);
+    function transferFrom(address from, address to, uint value) external returns (bool);
+
+    function DOMAIN_SEPARATOR() external view returns (bytes32);
+    function PERMIT_TYPEHASH() external pure returns (bytes32);
+    function nonces(address owner) external view returns (uint);
+
+    function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external;
+
+    event Mint(address indexed sender, uint amount0, uint amount1);
+    event Burn(address indexed sender, uint amount0, uint amount1, address indexed to);
+    event Swap(
+        address indexed sender,
+        uint amount0In,
+        uint amount1In,
+        uint amount0Out,
+        uint amount1Out,
+        address indexed to
+    );
+    event Sync(uint112 reserve0, uint112 reserve1);
+
+    function MINIMUM_LIQUIDITY() external pure returns (uint);
+    function factory() external view returns (address);
+    function token0() external view returns (address);
+    function token1() external view returns (address);
+    function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast);
+    function price0CumulativeLast() external view returns (uint);
+    function price1CumulativeLast() external view returns (uint);
+    function kLast() external view returns (uint);
+
+    function mint(address to) external returns (uint liquidity);
+    function burn(address to) external returns (uint amount0, uint amount1);
+    function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external;
+    function skim(address to) external;
+    function sync() external;
+
+    function initialize(address, address) external;
+}
+
+
 // File @uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol@v1.1.0-beta.0
 
 pragma solidity >=0.6.2;
 
 interface IUniswapV2Router01 {
     function factory() external pure returns (address);
-    function WETH() external pure returns (address);
+    function WAVAX() external pure returns (address);
 
     function addLiquidity(
         address tokenA,
@@ -946,14 +937,14 @@ interface IUniswapV2Router01 {
         address to,
         uint deadline
     ) external returns (uint amountA, uint amountB, uint liquidity);
-    function addLiquidityETH(
+    function addLiquidityAVAX(
         address token,
         uint amountTokenDesired,
         uint amountTokenMin,
-        uint amountETHMin,
+        uint amountAVAXMin,
         address to,
         uint deadline
-    ) external payable returns (uint amountToken, uint amountETH, uint liquidity);
+    ) external payable returns (uint amountToken, uint amountAVAX, uint liquidity);
     function removeLiquidity(
         address tokenA,
         address tokenB,
@@ -963,14 +954,14 @@ interface IUniswapV2Router01 {
         address to,
         uint deadline
     ) external returns (uint amountA, uint amountB);
-    function removeLiquidityETH(
+    function removeLiquidityAVAX(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountETHMin,
+        uint amountAVAXMin,
         address to,
         uint deadline
-    ) external returns (uint amountToken, uint amountETH);
+    ) external returns (uint amountToken, uint amountAVAX);
     function removeLiquidityWithPermit(
         address tokenA,
         address tokenB,
@@ -981,15 +972,15 @@ interface IUniswapV2Router01 {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint amountA, uint amountB);
-    function removeLiquidityETHWithPermit(
+    function removeLiquidityAVAXWithPermit(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountETHMin,
+        uint amountAVAXMin,
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external returns (uint amountToken, uint amountETH);
+    ) external returns (uint amountToken, uint amountAVAX);
     function swapExactTokensForTokens(
         uint amountIn,
         uint amountOutMin,
@@ -1004,17 +995,17 @@ interface IUniswapV2Router01 {
         address to,
         uint deadline
     ) external returns (uint[] memory amounts);
-    function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
+    function swapExactAVAXForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
         payable
         returns (uint[] memory amounts);
-    function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+    function swapTokensForExactAVAX(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
         external
         returns (uint[] memory amounts);
-    function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+    function swapExactTokensForAVAX(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
         returns (uint[] memory amounts);
-    function swapETHForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
+    function swapAVAXForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
         external
         payable
         returns (uint[] memory amounts);
@@ -1032,23 +1023,23 @@ interface IUniswapV2Router01 {
 pragma solidity >=0.6.2;
 
 interface IUniswapV2Router02 is IUniswapV2Router01 {
-    function removeLiquidityETHSupportingFeeOnTransferTokens(
+    function removeLiquidityAVAXSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountETHMin,
+        uint amountAVAXMin,
         address to,
         uint deadline
-    ) external returns (uint amountETH);
-    function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
+    ) external returns (uint amountAVAX);
+    function removeLiquidityAVAXWithPermitSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,
         uint amountTokenMin,
-        uint amountETHMin,
+        uint amountAVAXMin,
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external returns (uint amountETH);
+    ) external returns (uint amountAVAX);
 
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
         uint amountIn,
@@ -1057,13 +1048,13 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
         address to,
         uint deadline
     ) external;
-    function swapExactETHForTokensSupportingFeeOnTransferTokens(
+    function swapExactAVAXForTokensSupportingFeeOnTransferTokens(
         uint amountOutMin,
         address[] calldata path,
         address to,
         uint deadline
     ) external payable;
-    function swapExactTokensForETHSupportingFeeOnTransferTokens(
+    function swapExactTokensForAVAXSupportingFeeOnTransferTokens(
         uint amountIn,
         uint amountOutMin,
         address[] calldata path,
@@ -1073,24 +1064,11 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 }
 
 
-// File contracts/VALIDATOOR.sol
-
-// Website - validatoor.money (domain owned, not live as of Wednesday 21st September 2022)
+// File contracts/aVALIDATOOR.sol
 
 // Telegram - https://t.me/validatoor
 
-// Tax on the token is 5% for buys and sells -  accumulated for ETH Validators and future staking
-
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
-
-
-
-
-
-
-
-pragma solidity ^0.8.0;
+// Tax on the token is 5% for buys and sells -  accumulated for EVM Validators and future staking
 
 contract VALIDATOOR is ERC20, Ownable {
     using SafeMath for uint256;
@@ -1110,7 +1088,6 @@ contract VALIDATOOR is ERC20, Ownable {
     // == CONSTANTS ==
     uint256 public constant MAX_SUPPLY = 1_000_000_000 ether;
     uint256 public constant BPS_DENOMINATOR = 10_000;
-    uint256 public constant SNIPE_BLOCKS = 2;
 
     // == TAXES ==
     /// @notice Buy devTax in BPS
@@ -1134,9 +1111,9 @@ contract VALIDATOOR is ERC20, Ownable {
     /// @notice flag indicating whether initialDistribute() was successfully called
     bool public initialDistributeDone = false;
     /// @notice flag indicating Uniswap trading status
-    bool public tradingActive = false;
+    bool public tradingActive = true;
     /// @notice flag indicating token to token transfers
-    bool public transfersActive = false;
+    bool public transfersActive = true;
     /// @notice flag indicating swapAll enabled
     bool public swapFees = true;
 
@@ -1183,7 +1160,6 @@ contract VALIDATOOR is ERC20, Ownable {
     event TradingActiveChanged(bool enabled);
     event TaxExclusionChanged(address user, bool taxExcluded);
     event BlacklistUpdated(address user, bool previousStatus, bool nextStatus);
-    event SwapFeesChanged(bool previousStatus, bool nextStatus);
 
     constructor(
         address _factory,
@@ -1202,29 +1178,9 @@ contract VALIDATOOR is ERC20, Ownable {
 
         router = IUniswapV2Router02(_router);
         IUniswapV2Factory factory = IUniswapV2Factory(_factory);
-        pair = factory.createPair(address(this), router.WETH());
+        pair = factory.createPair(address(this), router.WAVAX());
 
         _mint(msg.sender, MAX_SUPPLY);
-    }
-
-    function addLiquidity(uint256 tokens)
-        external
-        payable
-        onlyOwner
-        liquidityAdd
-    {
-        _rawTransfer(msg.sender, address(this), tokens);
-        _approve(address(this), address(router), tokens);
-
-        router.addLiquidityETH{value: msg.value}(
-            address(this),
-            tokens,
-            0,
-            0,
-            owner(),
-            // solhint-disable-next-line not-rely-on-time
-            block.timestamp
-        );
     }
 
     /// @notice Change the address of the devTax recipient
@@ -1250,49 +1206,6 @@ contract VALIDATOOR is ERC20, Ownable {
         rewardsTaxRecipient = _rewardsTaxRecipient;
     }
 
-    /// @notice Change the buy devTax rate
-    /// @param _buyDevTax The new devTax rate
-    function setBuyDevTax(uint256 _buyDevTax) external onlyOwner {
-        require(
-            _buyDevTax <= BPS_DENOMINATOR,
-            "_buyDevTax cannot exceed BPS_DENOMINATOR"
-        );
-        emit BuyDevTaxChanged(buyDevTax, _buyDevTax);
-        buyDevTax = _buyDevTax;
-    }
-
-    /// @notice Change the buy devTax rate
-    /// @param _sellDevTax The new devTax rate
-    function setSellDevTax(uint256 _sellDevTax) external onlyOwner {
-        require(
-            _sellDevTax <= BPS_DENOMINATOR,
-            "_sellDevTax cannot exceed BPS_DENOMINATOR"
-        );
-        emit SellDevTaxChanged(sellDevTax, _sellDevTax);
-        sellDevTax = _sellDevTax;
-    }
-
-    /// @notice Change the buy rewardsTax rate
-    /// @param _buyRewardsTax The new buy rewardsTax rate
-    function setBuyRewardsTax(uint256 _buyRewardsTax) external onlyOwner {
-        require(
-            _buyRewardsTax <= BPS_DENOMINATOR,
-            "_buyRewardsTax cannot exceed BPS_DENOMINATOR"
-        );
-        emit BuyRewardsTaxChanged(buyRewardsTax, _buyRewardsTax);
-        buyRewardsTax = _buyRewardsTax;
-    }
-
-    /// @notice Change the sell rewardsTax rate
-    /// @param _sellRewardsTax The new sell rewardsTax rate
-    function setSellRewardsTax(uint256 _sellRewardsTax) external onlyOwner {
-        require(
-            _sellRewardsTax <= BPS_DENOMINATOR,
-            "_sellRewardsTax cannot exceed BPS_DENOMINATOR"
-        );
-        emit SellRewardsTaxChanged(sellRewardsTax, _sellRewardsTax);
-        sellRewardsTax = _sellRewardsTax;
-    }
 
     /// @notice Rescue ATI from the devTax amount
     /// @dev Should only be used in an emergency
@@ -1344,26 +1257,6 @@ contract VALIDATOOR is ERC20, Ownable {
         blacklist[user] = status;
     }
 
-    /// @notice Enables trading on Uniswap
-    function enableTrading() external onlyOwner {
-        tradingActive = true;
-    }
-
-    /// @notice Disables trading on Uniswap
-    function disableTrading() external onlyOwner {
-        tradingActive = false;
-    }
-
-    /// @notice Enables token to token transfers
-    function enableTransfers() external onlyOwner {
-        transfersActive = true;
-    }
-
-    /// @notice Disables token to token transfers
-    function disableTransfers() external onlyOwner {
-        transfersActive = false;
-    }
-
     /// @notice Updates tax exclusion status
     /// @param _account Account to update the tax exclusion status of
     /// @param _taxExcluded If true, exclude taxes for this user
@@ -1373,13 +1266,6 @@ contract VALIDATOOR is ERC20, Ownable {
     {
         taxExcluded[_account] = _taxExcluded;
         emit TaxExclusionChanged(_account, _taxExcluded);
-    }
-
-    /// @notice Enable or disable whether swap occurs during `_transfer`
-    /// @param _swapFees If true, enables swap during `_transfer`
-    function setSwapFees(bool _swapFees) external onlyOwner {
-        emit SwapFeesChanged(swapFees, _swapFees);
-        swapFees = _swapFees;
     }
 
     function balanceOf(address account)
@@ -1422,7 +1308,7 @@ contract VALIDATOOR is ERC20, Ownable {
         uint256 rewardsTax;
         if (sender == pair) {
             require(tradingActive, "Trading is not yet active");
-            if (block.number <= tradingBlock + SNIPE_BLOCKS) {
+            if (block.number <= tradingBlock ) {
                 _updateBlacklist(recipient, true);
             }
             (send, devTax, rewardsTax) = _getTaxAmounts(amount, true);
@@ -1443,19 +1329,19 @@ contract VALIDATOOR is ERC20, Ownable {
         }
     }
 
-    /// @notice Perform a Uniswap v2 swap from token to ETH and handle tax distribution
+    /// @notice Perform a Uniswap v2 swap from token to AVAX and handle tax distribution
     /// @param amount The amount of token to swap in wei
-    /// @dev `amount` is always <= this contract's ETH balance.
+    /// @dev `amount` is always <= this contract's AVAX balance.
     function _swap(uint256 amount) internal lockSwap {
         address[] memory path = new address[](2);
         path[0] = address(this);
-        path[1] = router.WETH();
+        path[1] = router.WAVAX();
 
         _approve(address(this), address(router), amount);
 
         uint256 contractEthBalance = address(this).balance;
 
-        router.swapExactTokensForETHSupportingFeeOnTransferTokens(
+        router.swapExactTokensForAVAXSupportingFeeOnTransferTokens(
             amount,
             0,
             path,
@@ -1491,8 +1377,8 @@ contract VALIDATOOR is ERC20, Ownable {
         minTokenBalance = _minTokenBalance;
     }
 
-    /// @notice Admin function to rescue ETH from the contract
-    function rescueETH() external onlyOwner {
+    /// @notice Admin function to rescue AVAX from the contract
+    function rescueAVAX() external onlyOwner {
         payable(owner()).transfer(address(this).balance);
     }
 
